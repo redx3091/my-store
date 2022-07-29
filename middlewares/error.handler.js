@@ -4,15 +4,24 @@ function logErrors (err, req, res, next) {
   next(err);
 }
 
-function errorHendler(err, req, res, next) {
+function errorHendler(err, req, res, ) {
   console.log('loghandler');
-  res.status(500).json({
+  res.statusCode(500).json({
     message: err.message,
     stack: err.stack,
   });
 }
 
+function boomHendler(err, req, res, next) {
+  if (err.isBoom) {
+    const {output} = err;
+    res.status(output.statusCode).json(output.payload);
+  }
+  next(err);
+}
+
 module.exports = {
   logErrors,
   errorHendler,
+  boomHendler
 }
