@@ -4,14 +4,14 @@ const routerApi = require('./routes/router');
 const { logErrors, errorHendler, boomHendler } = require('./middlewares/error.handler')
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
 const whitelist = ['http://localhost:8080', 'http://myapp.co'];
 const options = {
   origin: (origin, callback) => {
-    if(whitelist.includes(origin)) {
+    if(whitelist.includes(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error('No permitido'));
@@ -26,9 +26,9 @@ app.use(logErrors);
 app.use(boomHendler);
 app.use(errorHendler);
 
-// app.get('/', (req, res) => {
-//   res.send('Hola mi server en express');
-// });
+app.get('/', (req, res) => {
+  res.send('Hola mi server en express');
+});
 
 // app.get('/nueva-ruta', (req, res) => {
 //   res.send('Hola, soy una nueva ruta');
