@@ -10,8 +10,8 @@ router.get('/categories/:categoryId/products/:productId', (req, res) => {
   res.json(categories);
 });
 
-router.get('/', (req, res) => {
-  const categories = service.find();
+router.get('/', async (req, res) => {
+  const categories = await service.find();
   res.json(categories);
 });
 
