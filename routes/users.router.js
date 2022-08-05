@@ -2,7 +2,7 @@ const express = require('express');
 
 const UserService = require('./../services/users.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const queryHandler = require('../middlewares/query.handler');
+//const queryHandler = require('../middlewares/query.handler');
 const {
   updateUserSchema,
   createUserSchema,
@@ -38,7 +38,6 @@ router.get(
 router.post(
   '/',
   validatorHandler(createUserSchema, 'body'),
-  queryHandler(),
   async (req, res, next) => {
     try {
       const body = req.body;

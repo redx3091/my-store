@@ -11,7 +11,7 @@ function queryHandler() {
     });
 
     if (user) {
-      return next(boom.conflict('User already exist'));
+      return next(boom.conflict('User already exist ' + data.email));
     }
     next();
   };
