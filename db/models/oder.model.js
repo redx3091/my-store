@@ -26,7 +26,7 @@ const OrderSchema = {
   },
 };
 
-class User extends Model {
+class Order extends Model {
   static associate() {}
 
   static config(sequelize) {
@@ -40,7 +40,7 @@ class User extends Model {
 }
 
 module.exports = {
-  USER_TABLE,
-  UserSchema,
-  User,
+  ORDER_TABLE,
+  OrderSchema,
+  Order,
 };
