@@ -1,6 +1,7 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
+const { CUSTOMER_TABLE } = require('./customer.model');
 
-const ORDER_TABLE = 'users';
+const ORDER_TABLE = 'orders';
 
 const OrderSchema = {
   id: {
@@ -9,14 +10,14 @@ const OrderSchema = {
     primaryKey: true,
     type: DataTypes.INTEGER,
   },
-  email: {
+  customerId: {
+    field: 'customer_id',
     allowNull: false,
-    type: DataTypes.STRING,
-    unique: true,
-  },
-  password: {
-    allowNull: false,
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
+    references: {
+      model: CUSTOMER_TABLE,
+      key: 'id',
+    },
   },
   createAt: {
     allowNull: false,
@@ -27,13 +28,17 @@ const OrderSchema = {
 };
 
 class Order extends Model {
-  static associate() {}
+  static associate(models) {
+    this.belongsTo(models.Customer, {
+      as: 'customer',
+    });
+  }
 
   static config(sequelize) {
     return {
       sequelize,
-      tableName: USER_TABLE,
-      modelName: 'User',
+      tableName: ORDER_TABLE,
+      modelName: 'Order',
       timestamps: false,
     };
   }
