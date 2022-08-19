@@ -1,4 +1,4 @@
-//const boom = require('@hapi/boom');
+const boom = require('@hapi/boom');
 
 const { models } = require('./../libs/sequelize');
 
@@ -11,7 +11,17 @@ class OrderService {
   }
 
   async create(data) {
-    const newOrder = await models.Order.create(data);
+    console.log(data);
+    const customer = await models.Customer.findOne({
+      where: {
+        '$user.id$': data,
+      },
+      include: ['user'],
+    });
+    if (!customer) {
+      throw boom.badRequest('customer not found');
+    }
+    const newOrder = await models.Order.create({ customerId: customer.id });
     return newOrder;
   }
 
@@ -19,6 +29,21 @@ class OrderService {
     const query = 'SELECT * FROM task';
     const rta = await this.pool.query(query);
     return rta.rows;
+  }
+
+  async findByUser(userId) {
+    const orders = await models.Order.findAll({
+      where: {
+        '$customer.user.id$': userId,
+      },
+      include: [
+        {
+          association: 'customer',
+          include: ['user'],
+        },
+      ],
+    });
+    return orders;
   }
 
   async findOne(id) {
